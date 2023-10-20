@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'This is a config file for VPC and Subnet for App, Web and DB'
+Metadata: {}
+Parameters: {}
+Mappings: {}
+Conditions: {}
+Resources:
+  myVPC:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: myVPC
+ 
+  App:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId:
+        Ref: myVPC
+      AvailabilityZone: "us-east-1a"
+      CidrBlock: 10.0.1.0/24
+      Tags: 
+      - Key: Name
+        Value: App
+  
+  Web:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId:
+        Ref: myVPC
+      AvailabilityZone: "us-east-1b"
+      CidrBlock: 10.0.4.0/24
+      Tags: 
+      - Key: Name
+        Value: Web
+
+  DB:
+    Type: AWS::EC2::Subnet
+    Properties: 
+      VpcId:
+        Ref: myVPC
+      AvailabilityZone: "us-east-1c"
+      CidrBlock: 10.0.10.0/24
+      Tags: 
+      - Key: Name
+        Value: DB
+
+Outputs: {}
+
+
