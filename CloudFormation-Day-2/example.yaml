@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This resources provisions a vpc, EC2 & SG
+Metadata: {}
+
+Parameters: 
+  paramName:
+    Description: Keypair for ProdVPC
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: Ansible
+
+Mappings: {}
+
+Conditions: {}
+
+Resources: 
+  ProdVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: ProdVPC
+
+  ProdSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1a
+      VpcId: !Ref ProdVPC
+      CidrBlock: 10.0.1.0/24
+      Tags:
+        - Key: Name
+          Value: ProdSubnet
+
+  ProdEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref paramName
+      ImageId: ami-003ed94f11f7ecc7e
+      InstanceType: t2.micro
+      SubnetId: !Ref ProdSubnet
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref secGroup
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        # put your script here
+      Tags:
+        - Key: Name
+          Value: ProdEC2
+
+  secGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: prod-sg
+      GroupDescription: This security group is for the prod environment
+      VpcId: !Ref ProdVPC
+      SecurityGroupIngress:
+        - FromPort: 22
+      Tags:
+        - Key: Name
+          Value: secGroup
+
+Outputs: {}
