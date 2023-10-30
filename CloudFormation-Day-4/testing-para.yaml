@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This is a cloudformation testing space for 
+Metadata: {}
+
+Parameters: 
+
+Mappings: {}
+
+Conditions: {} 
+
+Resources: 
+  myVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: --.--.--.--/--
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: Test
+
+Outputs: {}
